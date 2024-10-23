@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
+import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { WalletIcon, Share2Icon } from 'lucide-react'
 import SpinWheel from './components/SpinWheel'
 import ClickerGame from './components/ClickerGame'
 import WalletConnection from './components/WalletConnection'
