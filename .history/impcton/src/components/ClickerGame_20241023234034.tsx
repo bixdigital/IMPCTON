@@ -10,11 +10,9 @@ export default function ClickerGame({ balance, setBalance }: ClickerGameProps) {
   const [clicks, setClicks] = useState(0)
   const [multiplier, setMultiplier] = useState(1)
   const [cooldown, setCooldown] = useState(false)
-  const [timeLeft, setTimeLeft] = useState(30) // Count-down timer
-  const [elapsedTime, setElapsedTime] = useState(0) // Count-up timer
+  const [timeLeft, setTimeLeft] = useState(30)
   const [upgradeCost, setUpgradeCost] = useState(500)
   const [canUpgrade, setCanUpgrade] = useState(true)
-  const [isShaking, setIsShaking] = useState(false)
 
   const handleClick = useCallback(() => {
     if (cooldown || timeLeft === 0) return
@@ -24,10 +22,6 @@ export default function ClickerGame({ balance, setBalance }: ClickerGameProps) {
       setBalance((prevBalance) => prevBalance + multiplier)
       return newClicks
     })
-
-    // Trigger the shaking animation
-    setIsShaking(true)
-    setTimeout(() => setIsShaking(false), 300) // Shaking lasts for 300ms
 
     setCooldown(true)
     setTimeout(() => setCooldown(false), 100)
@@ -39,11 +33,10 @@ export default function ClickerGame({ balance, setBalance }: ClickerGameProps) {
       setMultiplier((prevMultiplier) => prevMultiplier + 1)
       setUpgradeCost((prevCost) => prevCost * 2)
       setCanUpgrade(false)
-      setTimeout(() => setCanUpgrade(true), 12 * 60 * 60 * 1000) // 12 hours cooldown
+      setTimeout(() => setCanUpgrade(true), 12 * 60 * 60 * 1000)
     }
   }
 
-  // Handle the count-down timer
   useEffect(() => {
     if (timeLeft > 0) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000)
@@ -51,13 +44,6 @@ export default function ClickerGame({ balance, setBalance }: ClickerGameProps) {
     }
   }, [timeLeft])
 
-  // Handle the count-up timer (Elapsed time)
-  useEffect(() => {
-    const timer = setTimeout(() => setElapsedTime(elapsedTime + 1), 1000)
-    return () => clearTimeout(timer)
-  }, [elapsedTime])
-
-  // Reset the countdown when clicks reach 500
   useEffect(() => {
     if (clicks >= 500) {
       setTimeLeft(0)
@@ -68,15 +54,15 @@ export default function ClickerGame({ balance, setBalance }: ClickerGameProps) {
     <Card className="p-6 text-center">
       <h2 className="text-2xl font-bold mb-4">Clicker Game</h2>
       <p className="mb-2">Clicks: {clicks} | Multiplier: {multiplier}x</p>
-      <p className="mb-2">Time left (Countdown): {timeLeft}s</p>
-      <p className="mb-4">Elapsed time (Count-up): {elapsedTime}s</p>
+      <p className="mb-4">Time left: {timeLeft}s</p>
       
       <div 
-        className={`mb-4 cursor-pointer w-full h-48 sm:h-64 md:h-72 lg:h-80 xl:h-96 flex justify-center items-center ${isShaking ? 'animate-shake' : ''} ${cooldown || timeLeft === 0 ? 'opacity-50 pointer-events-none' : ''}`}
-        onClick={!cooldown && timeLeft > 0 ? handleClick : undefined}
+        className="mb-4 cursor-pointer w-full h-48 sm:h-64 md:h-72 lg:h-80 xl:h-96 flex justify-center items-center"
+        onClick={handleClick}
+        disabled={cooldown || timeLeft === 0}
       >
         <img 
-          src="/clickable-image.png" 
+          src="" 
           alt="Click Me" 
           className="object-contain h-full w-auto"
         />
