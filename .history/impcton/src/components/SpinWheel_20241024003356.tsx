@@ -153,7 +153,7 @@ export default function SpinWheel({ balance, setBalance }: SpinWheelProps) {
 
           // Update arrow rotation based on the segment pointed to
           if (arrowRef.current) {
-            const arrowRotation = (360 - (currentRotation % 360)) % 360 // Adjust rotation
+            const arrowRotation = (180 - (currentRotation % 180)) % 360 // Adjust rotation
             arrowRef.current.style.transform = `rotate(${arrowRotation}deg)` // Rotate arrow to face the segment
           }
         }
