@@ -15,7 +15,6 @@ export default function SpinWheel({ balance, setBalance }: SpinWheelProps) {
   const [spinCount, setSpinCount] = useState(0) // Track number of spins
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const arrowRef = useRef<HTMLImageElement>(null)
 
   // Define segments and their rewards
   const segments = [
@@ -25,7 +24,7 @@ export default function SpinWheel({ balance, setBalance }: SpinWheelProps) {
     { label: "40", value: 40 },
     { label: "50", value: 50 },
     { label: "100", value: 100 },
-    { label: "200", value: 200 },
+    { label: "tryagain", value: 2 },
     { label: "500", value: 500 },
   ]
 
@@ -150,12 +149,6 @@ export default function SpinWheel({ balance, setBalance }: SpinWheelProps) {
           }
 
           setIsSpinning(false)
-
-          // Update arrow rotation based on the segment pointed to
-          if (arrowRef.current) {
-            const arrowRotation = (180 - (currentRotation % 180)) % 180 // Adjust rotation
-            arrowRef.current.style.transform = `rotate(${arrowRotation}deg)` // Rotate arrow to face the segment
-          }
         }
       }
       requestAnimationFrame(animate)
@@ -179,10 +172,9 @@ export default function SpinWheel({ balance, setBalance }: SpinWheelProps) {
           className="rounded-full border-4 border-yellow-400"
         />
         <img
-          ref={arrowRef}
           src="/spin-arrow.png" // Ensure the image path is correct and that it exists in the public folder
           alt="Spin Arrow"
-          className="absolute top-1/2 left-full transform -translate-x-1/2 -translate-y-1/2 w-16 h-16"
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16"
           style={{ zIndex: 10 }} // Ensure the arrow is on top of the wheel
         />
       </div>

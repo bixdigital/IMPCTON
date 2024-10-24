@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 
@@ -12,10 +12,8 @@ export default function SpinWheel({ balance, setBalance }: SpinWheelProps) {
   const [timeLeft, setTimeLeft] = useState(0)
   const [isSpinning, setIsSpinning] = useState(false)
   const [reward, setReward] = useState(0)
-  const [spinCount, setSpinCount] = useState(0) // Track number of spins
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const arrowRef = useRef<HTMLImageElement>(null)
 
   // Define segments and their rewards
   const segments = [
@@ -30,18 +28,12 @@ export default function SpinWheel({ balance, setBalance }: SpinWheelProps) {
   ]
 
   useEffect(() => {
-    const lastSpinData = JSON.parse(localStorage.getItem('lastSpinData') || '{}')
-    const { lastSpinTime, count } = lastSpinData
-
+    const lastSpinTime = localStorage.getItem('lastSpinTime')
     if (lastSpinTime) {
-      const timeDiff = Date.now() - lastSpinTime
+      const timeDiff = Date.now() - parseInt(lastSpinTime)
       if (timeDiff < 4 * 60 * 60 * 1000) {
         setCanSpin(false)
         setTimeLeft(4 * 60 * 60 * 1000 - timeDiff)
-        setSpinCount(count || 0)
-      } else {
-        // Reset if cooldown period is over
-        localStorage.removeItem('lastSpinData')
       }
     }
 
@@ -59,7 +51,7 @@ export default function SpinWheel({ balance, setBalance }: SpinWheelProps) {
     return () => clearInterval(timer)
   }, [])
 
-  const drawWheel = useCallback(() => {
+  const drawWheel = () => {
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
@@ -93,10 +85,10 @@ export default function SpinWheel({ balance, setBalance }: SpinWheelProps) {
       ctx.fillText(segment.label, radius / 2, 0)
       ctx.restore()
     })
-  }, [segments])
+  }
 
   const handleSpin = () => {
-    if (!canSpin || spinCount >= 3) return
+    if (!canSpin) return
 
     setIsSpinning(true)
     const spinDuration = 3000 // Spin duration in milliseconds
@@ -135,27 +127,10 @@ export default function SpinWheel({ balance, setBalance }: SpinWheelProps) {
           const rewardAmount = segments[(rewardIndex + segments.length - 1) % segments.length].value
           setReward(rewardAmount)
           setBalance((prevBalance) => prevBalance + rewardAmount)
-          setSpinCount((prevCount) => prevCount + 1)
-
-          // Store spin count and time in local storage
-          const lastSpinData = {
-            lastSpinTime: Date.now(),
-            count: (spinCount + 1) % 3 === 0 ? 0 : spinCount + 1,
-          }
-          localStorage.setItem('lastSpinData', JSON.stringify(lastSpinData))
-
-          if (lastSpinData.count === 0) {
-            setCanSpin(false)
-            setTimeLeft(4 * 60 * 60 * 1000)
-          }
-
+          setCanSpin(false)
+          setTimeLeft(4 * 60 * 60 * 1000)
+          localStorage.setItem('lastSpinTime', Date.now().toString())
           setIsSpinning(false)
-
-          // Update arrow rotation based on the segment pointed to
-          if (arrowRef.current) {
-            const arrowRotation = (180 - (currentRotation % 180)) % 180 // Adjust rotation
-            arrowRef.current.style.transform = `rotate(${arrowRotation}deg)` // Rotate arrow to face the segment
-          }
         }
       }
       requestAnimationFrame(animate)
@@ -179,14 +154,12 @@ export default function SpinWheel({ balance, setBalance }: SpinWheelProps) {
           className="rounded-full border-4 border-yellow-400"
         />
         <img
-          ref={arrowRef}
-          src="/spin-arrow.png" // Ensure the image path is correct and that it exists in the public folder
+          src="/spin-arrow.png" // Make sure to add an arrow image in the public folder
           alt="Spin Arrow"
-          className="absolute top-1/2 left-full transform -translate-x-1/2 -translate-y-1/2 w-16 h-16"
-          style={{ zIndex: 10 }} // Ensure the arrow is on top of the wheel
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16"
         />
       </div>
-      <Button onClick={handleSpin} disabled={!canSpin || spinCount >= 3} className={`mt-4 ${canSpin && spinCount < 3 ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-400 cursor-not-allowed'}`}>
+      <Button onClick={handleSpin} disabled={!canSpin} className={`mt-4 ${canSpin ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-400 cursor-not-allowed'}`}>
         {isSpinning ? 'Spinning...' : 'Spin the Wheel'}
       </Button>
       {reward > 0 && (
@@ -194,13 +167,6 @@ export default function SpinWheel({ balance, setBalance }: SpinWheelProps) {
           You won: {reward}!
         </p>
       )}
-      {!canSpin && (
-        <p className="mt-4 text-red-500">
-          You need to wait {Math.ceil(timeLeft / 1000)} seconds to spin again.
-        </p>
-      )}
-      {/* Display current balance */}
-      <p className="mt-4 text-lg">Current Balance: {balance}</p>
     </Card>
   )
 }

@@ -15,7 +15,6 @@ export default function SpinWheel({ balance, setBalance }: SpinWheelProps) {
   const [spinCount, setSpinCount] = useState(0) // Track number of spins
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const arrowRef = useRef<HTMLImageElement>(null)
 
   // Define segments and their rewards
   const segments = [
@@ -150,12 +149,6 @@ export default function SpinWheel({ balance, setBalance }: SpinWheelProps) {
           }
 
           setIsSpinning(false)
-
-          // Update arrow rotation based on the segment pointed to
-          if (arrowRef.current) {
-            const arrowRotation = (180 - (currentRotation % 180)) % 180 // Adjust rotation
-            arrowRef.current.style.transform = `rotate(${arrowRotation}deg)` // Rotate arrow to face the segment
-          }
         }
       }
       requestAnimationFrame(animate)
@@ -179,11 +172,9 @@ export default function SpinWheel({ balance, setBalance }: SpinWheelProps) {
           className="rounded-full border-4 border-yellow-400"
         />
         <img
-          ref={arrowRef}
-          src="/spin-arrow.png" // Ensure the image path is correct and that it exists in the public folder
+          src="/spin-arrow.png" // Make sure to add an arrow image in the public folder
           alt="Spin Arrow"
-          className="absolute top-1/2 left-full transform -translate-x-1/2 -translate-y-1/2 w-16 h-16"
-          style={{ zIndex: 10 }} // Ensure the arrow is on top of the wheel
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16"
         />
       </div>
       <Button onClick={handleSpin} disabled={!canSpin || spinCount >= 3} className={`mt-4 ${canSpin && spinCount < 3 ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-400 cursor-not-allowed'}`}>
@@ -199,8 +190,6 @@ export default function SpinWheel({ balance, setBalance }: SpinWheelProps) {
           You need to wait {Math.ceil(timeLeft / 1000)} seconds to spin again.
         </p>
       )}
-      {/* Display current balance */}
-      <p className="mt-4 text-lg">Current Balance: {balance}</p>
     </Card>
   )
 }
