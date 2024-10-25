@@ -3,7 +3,7 @@
 import { TonConnectUIProvider, TonConnectButton, useTonConnectUI, useTonWallet } from "@tonconnect/ui-react"
 import { useEffect, useState } from "react"
 
-const manifestUrl = 'https://github.com/bixdigital/impcton-manifest.json/blob/main/tonconnect-manifest.json'
+const manifestUrl = 'https://spare-lime-fly.myfilebase.com/ipfs/QmcveTgo9rM3qpmwPDitbQXaA9Z6wCFYaXDGBxCAiD3Eo4'
 
 function WalletConnectionContent() {
   const [status, setStatus] = useState<string>("disconnected")
