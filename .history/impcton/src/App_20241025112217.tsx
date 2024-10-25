@@ -20,8 +20,8 @@ export default function App() {
       <Card className="bg-white/10 backdrop-blur-lg border-none text-white p-6">
         <Tabs defaultValue="spin" className="w-full">
           <TabsList className="grid w-full grid-cols-4 mb-4">
-            <TabsTrigger value="spin">Wheel</TabsTrigger>
-            <TabsTrigger value="clicker">Clicker</TabsTrigger>
+            <TabsTrigger value="spin">SWheel</TabsTrigger>
+            <TabsTrigger value="clicker">Clicker Game</TabsTrigger>
             <TabsTrigger value="tasks">Tasks</TabsTrigger>
             <TabsTrigger value="referral">Referral</TabsTrigger>
           </TabsList>

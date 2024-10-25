@@ -21,7 +21,7 @@ export default function App() {
         <Tabs defaultValue="spin" className="w-full">
           <TabsList className="grid w-full grid-cols-4 mb-4">
             <TabsTrigger value="spin">Wheel</TabsTrigger>
-            <TabsTrigger value="clicker">Clicker</TabsTrigger>
+            <TabsTrigger value="clicker">Clicker Game</TabsTrigger>
             <TabsTrigger value="tasks">Tasks</TabsTrigger>
             <TabsTrigger value="referral">Referral</TabsTrigger>
           </TabsList>
