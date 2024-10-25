@@ -151,7 +151,7 @@ export default function SpinWheel({ balance, setBalance }: SpinWheelProps) {
 
   useEffect(() => {
     if (canvasRef.current) {
-      const ctx = canvasRef.current.getContext('2d');
+      const ctx = canvasRef.current.getContext('d');
       if (ctx) {
         drawWheel(ctx, segments, canvasRef.current.width, canvasRef.current.height);
       }
@@ -159,8 +159,8 @@ export default function SpinWheel({ balance, setBalance }: SpinWheelProps) {
   }, [segments]);
 
   return (
-    <Card className="p-6 flex flex-col items-center justify-center bg-gradient-to-r from-blue-500 to-purple-500 shadow-lg rounded-lg text-center">
-      <div className="relative w-64 h-64 mb-6">
+    <Card className="p-6 flex items-center bg-gradient-to-r from-blue-500 to-purple-500 shadow-lg rounded-lg">
+      <div className="w-64 h-64 relative">
         <canvas
           ref={canvasRef}
           width={256}
@@ -175,30 +175,31 @@ export default function SpinWheel({ balance, setBalance }: SpinWheelProps) {
         />
       </div>
 
-      <div className="text-xl text-white mb-4">
-        <p className="font-semibold">Available Spins: {3 - spinCount}</p>
-        <p className="font-semibold">Current Balance: {balance}</p>
-        {reward && (
-          <p className="mt-4 text-green-400 font-semibold">
-            You won: {reward} tokens!
-          </p>
-        )}
-        {!canSpin && (
-          <p className="mt-4 text-red-500">
-            Wait {Math.ceil(timeLeft / 1000)} seconds to spin again.
-          </p>
-        )}
+      <div className="ml-8 text-center">
+        <h2 className="text-3xl font-bold mb-4 text-white drop-shadow-md">Spin Results</h2>
+        <div className="text-xl text-white">
+          <p>Available Spins: {3 - spinCount}</p>
+          {reward && (
+            <p className="mt-4 text-green-400 font-semibold">
+              You won: {reward} tokens!
+            </p>
+          )}
+          {!canSpin && (
+            <p className="mt-4 text-red-500">
+              Wait {Math.ceil(timeLeft / 1000)} seconds to spin again.
+            </p>
+          )}
+          <button
+            onClick={handleSpin}
+            disabled={!canSpin || spinCount >= 3}
+            className={`mt-6 px-6 py-3 rounded-md font-semibold text-white ${
+              canSpin && spinCount < 3 ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-500 cursor-not-allowed'
+            }`}
+          >
+            {isSpinning ? 'Spinning...' : 'Spin the Wheel'}
+          </button>
+        </div>
       </div>
-
-      <button
-        onClick={handleSpin}
-        disabled={!canSpin || spinCount >= 3}
-        className={`px-6 py-3 rounded-md font-semibold text-white ${
-          canSpin && spinCount < 3 ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-500 cursor-not-allowed'
-        }`}
-      >
-        {isSpinning ? 'Spinning...' : 'Spin the Wheel'}
-      </button>
     </Card>
   );
 }

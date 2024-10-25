@@ -1,9 +1,15 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 interface SpinWheelProps {
   balance: number;
   setBalance: React.Dispatch<React.SetStateAction<number>>;
+}
+
+interface LastSpinData {
+  lastSpinTime: number;
+  count: number;
 }
 
 const drawWheel = (
@@ -43,7 +49,7 @@ export default function SpinWheel({ balance, setBalance }: SpinWheelProps) {
   const [canSpin, setCanSpin] = useState(true);
   const [timeLeft, setTimeLeft] = useState(0);
   const [isSpinning, setIsSpinning] = useState(false);
-  const [reward, setReward] = useState<number | null>(null);
+  const [reward, setReward] = useState(0);
   const [spinCount, setSpinCount] = useState(0);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -60,7 +66,7 @@ export default function SpinWheel({ balance, setBalance }: SpinWheelProps) {
   ], []);
 
   useEffect(() => {
-    const lastSpinData = JSON.parse(localStorage.getItem('lastSpinData') || '{}');
+    const lastSpinData: LastSpinData = JSON.parse(localStorage.getItem('lastSpinData') || '{}');
     const { lastSpinTime, count } = lastSpinData;
 
     if (lastSpinTime) {
@@ -129,7 +135,7 @@ export default function SpinWheel({ balance, setBalance }: SpinWheelProps) {
           setBalance((prevBalance) => prevBalance + rewardAmount);
           setSpinCount((prevCount) => prevCount + 1);
 
-          const lastSpinData = {
+          const lastSpinData: LastSpinData = {
             lastSpinTime: Date.now(),
             count: (spinCount + 1) % 3 === 0 ? 0 : spinCount + 1,
           };
@@ -159,8 +165,9 @@ export default function SpinWheel({ balance, setBalance }: SpinWheelProps) {
   }, [segments]);
 
   return (
-    <Card className="p-6 flex flex-col items-center justify-center bg-gradient-to-r from-blue-500 to-purple-500 shadow-lg rounded-lg text-center">
-      <div className="relative w-64 h-64 mb-6">
+    <Card className="p-6 text-center bg-gradient-to-r from-blue-500 to-purple-500 shadow-lg rounded-lg">
+      <h2 className="text-3xl font-bold mb-4 text-white drop-shadow-md">Spin the Wheel!</h2>
+      <div className="relative w-64 h-64 mx-auto mb-4">
         <canvas
           ref={canvasRef}
           width={256}
@@ -171,34 +178,26 @@ export default function SpinWheel({ balance, setBalance }: SpinWheelProps) {
         <img
           src="/spin-arrow.png"
           alt="Spin Arrow"
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16"
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 animate-spin"
         />
       </div>
-
-      <div className="text-xl text-white mb-4">
-        <p className="font-semibold">Available Spins: {3 - spinCount}</p>
-        <p className="font-semibold">Current Balance: {balance}</p>
-        {reward && (
-          <p className="mt-4 text-green-400 font-semibold">
-            You won: {reward} tokens!
-          </p>
-        )}
-        {!canSpin && (
-          <p className="mt-4 text-red-500">
-            Wait {Math.ceil(timeLeft / 1000)} seconds to spin again.
-          </p>
-        )}
-      </div>
-
-      <button
+      <Button
         onClick={handleSpin}
         disabled={!canSpin || spinCount >= 3}
-        className={`px-6 py-3 rounded-md font-semibold text-white ${
-          canSpin && spinCount < 3 ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-500 cursor-not-allowed'
-        }`}
+        className={`mt-4 ${canSpin && spinCount < 3 ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-400 cursor-not-allowed'}`}
       >
         {isSpinning ? 'Spinning...' : 'Spin the Wheel'}
-      </button>
+      </Button>
+      {reward > 0 && (
+        <p className="mt-4 text-lg font-bold text-green-500 animate-pulse">
+          You won: {reward}!
+        </p>
+      )}
+      {!canSpin && (
+        <p className="mt-4 text-red-500">
+          You need to wait {Math.ceil(timeLeft / 1000)} seconds to spin again.
+        </p>
+      )}
     </Card>
   );
 }

@@ -20,10 +20,11 @@ const ClickerGame: React.FC<ClickerGameProps> = ({ balance, setBalance }) => {
             },
             body: JSON.stringify({ command: '/click' }),
         });
-        setBalance((prev: number) => prev + clickPower);
+        setBalance((prev: number) => prev + clickPower); // Increment balance locally as well
     };
 
     const handleReward = async () => {
+        // Call Telegram bot with /reward command
         await fetch(`/api/telegram`, {
             method: 'POST',
             headers: {
@@ -31,10 +32,6 @@ const ClickerGame: React.FC<ClickerGameProps> = ({ balance, setBalance }) => {
             },
             body: JSON.stringify({ command: '/reward' }),
         });
-    };
-
-    const upgradeClickPower = () => {
-        setClickPower((prev) => prev + 1); // Increment click power
     };
 
     return (
@@ -49,13 +46,6 @@ const ClickerGame: React.FC<ClickerGameProps> = ({ balance, setBalance }) => {
             />
             <p className="mt-4">Balance: {balance}</p>
             <ProgressBar progress={(balance % 100)} />
-            <p className="mt-2">Click Power: {clickPower}</p>
-            <button
-                onClick={upgradeClickPower}
-                className="bg-green-500 text-white px-4 py-2 rounded-lg mt-4 transition transform hover:scale-105"
-            >
-                Upgrade Click Power
-            </button>
             <button
                 onClick={handleReward}
                 className="bg-blue-500 text-white px-4 py-2 rounded-lg mt-4 transition transform hover:scale-105"
