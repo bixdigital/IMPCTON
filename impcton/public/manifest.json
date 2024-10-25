@@ -1,7 +1,7 @@
 {
-  "url": "https://impcton-two.vercel.app/",                         // required
-  "name": "IMPCTON Wallet",                                        // required
-  "iconUrl": "https://i.imgur.com/xpWaP3c.png",                 // required
-  "termsOfUseUrl": "https://your-terms-of-use-url.com",          // optional
-  "privacyPolicyUrl": "https://your-privacy-policy-url.com"      // optional
+  "url": "https://impcton-two.vercel.app/",                         
+  "name": "IMPCTON Wallet",                                        
+  "iconUrl": "https://i.imgur.com/xpWaP3c.png",               
+  "termsOfUseUrl": "https://your-terms-of-use-url.com",          
+  "privacyPolicyUrl": "https://your-privacy-policy-url.com"     
 }
