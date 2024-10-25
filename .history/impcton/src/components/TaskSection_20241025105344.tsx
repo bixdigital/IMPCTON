@@ -16,7 +16,7 @@ interface TaskSectionProps {
   setBalance: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function TaskSection({ setBalance }: TaskSectionProps) {
+export default function TaskSection({ balance, setBalance }: TaskSectionProps) {
   const [tasks, setTasks] = useState<Task[]>([
     { id: '1', type: 'youtube', description: 'Watch a video for 5 minutes', reward: 50, completed: false },
     { id: '2', type: 'twitter', description: 'Retweet our latest post', reward: 30, completed: false },
