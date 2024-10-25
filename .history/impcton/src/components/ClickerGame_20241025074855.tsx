@@ -9,11 +9,9 @@ interface ClickerGameProps {
 
 const ClickerGame: React.FC<ClickerGameProps> = ({ balance, setBalance }) => {
   const [clickPower, setClickPower] = useState<number>(1);  // Used if needed later
-  const [isRotated, setIsRotated] = useState<boolean>(false); // State to track rotation
 
   const handleClick = () => {
     setBalance((prev: number) => prev + clickPower);
-    setIsRotated((prev) => !prev); // Toggle rotation state on click
   };
 
   const upgradeClickPower = () => {
@@ -30,9 +28,6 @@ const ClickerGame: React.FC<ClickerGameProps> = ({ balance, setBalance }) => {
         onClick={handleClick}
         whileTap={{ scale: 1.1 }}
         className="mx-auto w-32 h-32 cursor-pointer transition transform hover:scale-110 active:animate-bounce"
-        initial={{ rotate: 360 }} // Initial rotation
-        animate={{ rotate: isRotated ? 360 : 0 }} // Rotate when clicked
-        transition={{ duration: 0.5 }} // Transition duration for rotation
       />
       
       <p className="mt-4">Balance: {balance}</p>

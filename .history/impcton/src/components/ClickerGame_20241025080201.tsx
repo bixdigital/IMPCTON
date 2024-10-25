@@ -34,7 +34,7 @@ const ClickerGame: React.FC<ClickerGameProps> = ({ balance, setBalance }) => {
         animate={{ rotate: isRotated ? 360 : 0 }} // Rotate when clicked
         transition={{ duration: 0.5 }} // Transition duration for rotation
       />
-      
+      k
       <p className="mt-4">Balance: {balance}</p>
       <ProgressBar progress={(balance % 100)} />
       

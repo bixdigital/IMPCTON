@@ -32,7 +32,7 @@ const ClickerGame: React.FC<ClickerGameProps> = ({ balance, setBalance }) => {
         className="mx-auto w-32 h-32 cursor-pointer transition transform hover:scale-110 active:animate-bounce"
         initial={{ rotate: 360 }} // Initial rotation
         animate={{ rotate: isRotated ? 360 : 0 }} // Rotate when clicked
-        transition={{ duration: 0.5 }} // Transition duration for rotation
+        transition={{ duration: 1.0 }} // Transition duration for rotation
       />
       
       <p className="mt-4">Balance: {balance}</p>
